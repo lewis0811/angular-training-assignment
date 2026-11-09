@@ -1,0 +1,68 @@
+@if (period) {
+  <a class="back-link" [routerLink]="['/monthly-plans', period.year, period.month]">
+    <span aria-hidden="true">←</span>
+    Back to monthly plan
+  </a>
+}
+<section class="page-heading">
+  <p class="eyebrow">Monthly plan · {{ periodLabel }}</p>
+  <h1>Spending by jar</h1>
+  <p class="intro">Compare actual spending with each jar's planned budget. Currency: VND.</p>
+</section>
+
+@if (loading) {
+  <output class="notice">Loading spending summary…</output>
+} @else if (invalidRoute) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>This month is invalid.</strong>
+      <p>Choose a monthly plan to view its spending.</p>
+    </div>
+    <a class="button secondary" routerLink="/monthly-planning">Go to monthly planning</a>
+  </section>
+} @else if (error?.status === 404 && period) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>No plan found for {{ periodLabel }}.</strong>
+      <p>Create a plan before reviewing jar spending.</p>
+    </div>
+    <a class="button secondary" routerLink="/monthly-planning">Create a plan</a>
+  </section>
+} @else if (error) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>Could not load spending.</strong>
+      <p>{{ error.message }}</p>
+    </div>
+    <button class="button secondary" type="button" (click)="retry()">Try again</button>
+  </section>
+} @else if (response) {
+  <section class="spending-list" aria-label="Spending by jar">
+    @for (jar of response.jars; track jar.jarType) {
+      <article class="spending-card" [class.over-budget]="jar.percentageUsed > 100">
+        <div class="jar-heading">
+          <span class="jar-icon" aria-hidden="true">{{ jar.jarName.charAt(0) }}</span>
+          <div class="jar-copy">
+            <h2>{{ jar.jarName }}</h2>
+            @if (jar.percentageUsed > 100) {
+              <span class="over-budget-label">Over budget</span>
+            }
+          </div>
+          <strong class="percentage">{{ percentageLabel(jar.percentageUsed) }}</strong>
+        </div>
+        <progress
+          class="progress-track"
+          [attr.aria-label]="accessibleProgressLabel(jar)"
+          max="100"
+          [value]="progressWidth(jar.percentageUsed)"></progress>
+        <p class="amounts">
+          <strong>
+            {{ jar.spentBudgetVnd | vndFormat }}
+            <small>VND</small>
+          </strong>
+          <span>spent of {{ jar.plannedBudgetVnd | vndFormat }} VND</span>
+        </p>
+      </article>
+    }
+  </section>
+}

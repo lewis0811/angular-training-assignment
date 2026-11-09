@@ -1,1 +1,15 @@
-<router-outlet />
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/monthly-planning" aria-label="Family Finance home">
+      <span class="brand-mark" aria-hidden="true">F</span>
+      <span>Family Finance</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a routerLink="/monthly-planning" routerLinkActive="active" ariaCurrentWhenActive="page">Plan</a>
+      <a routerLink="/expenses/new" routerLinkActive="active" ariaCurrentWhenActive="page">Add expense</a>
+    </nav>
+  </header>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>

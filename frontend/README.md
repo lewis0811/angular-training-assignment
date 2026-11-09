@@ -1,59 +1,48 @@
-# FamilyFinance
+# Family Finance
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.24.
+Angular frontend for the Family Finance monthly budgeting assignment.
 
-## Development server
+## Prerequisites
 
-To start a local development server, run:
+- Node.js and npm compatible with the versions in `package.json`.
+- The ASP.NET Core API running with its development launch profile.
 
-```bash
-ng serve
+## Configure and run
+
+The development environment uses `https://localhost:54535` as the API base URL (`src/environments/environment.ts`). The backend launch profile also exposes `http://localhost:54536`.
+
+The backend CORS policy must allow the Angular origin `http://localhost:4200`. The development policy allows both `http://localhost:4200` and the existing `http://localhost:4400` origin.
+
+From the repository root, start the API:
+
+```powershell
+dotnet run --project backend\FamilyFinance.Api --launch-profile FamilyFinance.Api
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+In another terminal:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```powershell
+Set-Location frontend
+npm ci
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Open `http://localhost:4200/`. The root route redirects to monthly planning. API requests show an explicit connection error and retry action when the backend is unavailable.
 
-```bash
-ng generate --help
+## Demonstration flow
+
+1. Create a monthly plan with positive whole-VND income.
+2. View backend-calculated jar allocations and select another month from the allocation page.
+3. Add an expense; its date selects the monthly plan and its jar options.
+4. Open Spending by Jar from the allocation page or after saving an expense.
+
+Money is sent as digit-only strings, except backend `remainingVnd`, which may be negative. The frontend displays server-calculated financial values and does not calculate allocations or spending totals.
+
+## Tests and build
+
+```powershell
+npm test
+npm run build
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The Angular unit-test target enables coverage and enforces 80% statement, branch, function, and line coverage.

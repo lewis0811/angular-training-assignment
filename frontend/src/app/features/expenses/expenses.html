@@ -1,0 +1,69 @@
+<a class="back-link" routerLink="/monthly-planning">
+  <span aria-hidden="true">←</span>
+  Monthly planning
+</a>
+<section class="page-heading">
+  <p class="eyebrow">Track the little things</p>
+  <h1>Add an expense</h1>
+  <p class="intro">Record a family expense and assign it to the jar that fits.</p>
+</section>
+
+@if (loadingPlan) {
+  <output class="notice">Loading the plan for your expense date…</output>
+} @else if (planError?.status === 404) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>Create a monthly plan before adding an expense.</strong>
+      <p>No plan exists for this expense month.</p>
+    </div>
+    <a class="button secondary" routerLink="/monthly-planning">Create a plan</a>
+  </section>
+} @else if (planError) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>Could not load this month's plan.</strong>
+      <p>{{ planError.message }}</p>
+    </div>
+    <button class="button secondary" type="button" (click)="retryPlan()">Try again</button>
+  </section>
+}
+
+@if (plan) {
+  <div class="expense-grid">
+    <app-expense-details-form
+      [form]="form"
+      [jars]="plan.jars"
+      [saving]="saving"
+      [loading]="loadingPlan"
+      [fieldErrors]="fieldErrors()"
+      [formError]="submitError?.errors?.length ? null : (submitError?.message ?? null)"
+      (save)="submit()" />
+    <app-selected-jar-summary [jar]="selectedJar" [summary]="success?.jarSummary ?? null" />
+  </div>
+
+  @if (success) {
+    <output class="success-card">
+      <span class="success-copy">
+        <strong>Expense saved successfully.</strong>
+        <span class="success-description">
+          {{ success.expense.description }} · {{ success.expense.amountVnd }} VND added to
+          {{ success.expense.jarName }}.
+        </span>
+      </span>
+      <a class="button secondary" [routerLink]="['/monthly-plans', plan.year, plan.month, 'spending']">
+        View spending by jar
+        <span aria-hidden="true">→</span>
+      </a>
+    </output>
+  }
+
+  @if (submitError?.status === 404) {
+    <section class="notice error" role="alert">
+      <div>
+        <strong>The plan for this expense is no longer available.</strong>
+        <p>{{ submitError.message }}</p>
+      </div>
+      <a class="button secondary" routerLink="/monthly-planning">Create a plan</a>
+    </section>
+  }
+}

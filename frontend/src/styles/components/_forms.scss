@@ -11,7 +11,11 @@ select {
   font-family: var(--font-sans);
   color: var(--text-body);
   background: var(--f1-bg);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   box-sizing: border-box;
 
@@ -60,9 +64,10 @@ select {
   margin-left: 0.125rem; /* 2px */
 }
 
-.is-invalid {
-  border-color: var(--danger) !important;
-  background-color: var(--danger-bg) !important;
+input.is-invalid,
+select.is-invalid {
+  border-color: var(--danger);
+  background-color: var(--danger-bg);
 }
 
 .loading {

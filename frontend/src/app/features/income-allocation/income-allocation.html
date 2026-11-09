@@ -1,0 +1,61 @@
+<a class="back-link" routerLink="/monthly-planning">
+  <span aria-hidden="true">←</span>
+  Back to monthly planning
+</a>
+<section class="page-heading">
+  <p class="eyebrow">Make every dollar count</p>
+  <h1>Month budget summary</h1>
+  <p class="intro">See how your income is allocated across the seven family jars.</p>
+</section>
+
+<form class="period-selector" [formGroup]="periodForm" (ngSubmit)="selectPeriod()">
+  <label>
+    <span>Year</span>
+    <input type="number" formControlName="year" min="1" max="9999" aria-label="Plan year" />
+  </label>
+  <label>
+    <span>Plan month</span>
+    <select formControlName="month">
+      @for (month of months; track month.value) {
+        <option [ngValue]="month.value">{{ month.label }}</option>
+      }
+    </select>
+  </label>
+  <button class="button" type="submit" [disabled]="periodForm.invalid">View month</button>
+</form>
+
+@if (loading) {
+  <output class="notice">Loading your monthly plan…</output>
+} @else if (invalidRoute) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>This month is invalid.</strong>
+      <p>Choose a year and month between 1 and 12.</p>
+    </div>
+    <a class="button secondary" routerLink="/monthly-planning">Create a plan</a>
+  </section>
+} @else if (error?.status === 404) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>No plan found for this month.</strong>
+      <p>Create a monthly plan to see its allocation.</p>
+    </div>
+    <a class="button secondary" routerLink="/monthly-planning">Create a plan</a>
+  </section>
+} @else if (error) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>Could not load this monthly plan.</strong>
+      <p>{{ error.message }}</p>
+    </div>
+    <button class="button secondary" type="button" (click)="retry()">Try again</button>
+  </section>
+} @else if (plan) {
+  <app-allocation-summary [plan]="plan" />
+  @if (period) {
+    <a class="spending-link" [routerLink]="['/monthly-plans', period.year, period.month, 'spending']">
+      View spending by jar
+      <span aria-hidden="true">→</span>
+    </a>
+  }
+}

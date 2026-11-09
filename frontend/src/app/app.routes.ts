@@ -1,15 +1,22 @@
 import { Routes } from '@angular/router';
 
-// import { MonthlyPlanPageComponent } from './features/monthly-planning/pages/monthly-plan-page/monthly-plan-page.component';
-// import { MonthlyPlanningPageComponent } from './features/monthly-planning/pages/monthly-planning-page/monthly-planning-page.component';
-// import { DashboardPageComponent } from './features/dashboard/pages/dashboard-page/dashboard-page.component';
-// import { AddExpensePageComponent } from './features/expenses/pages/add-expense-page/add-expense-page.component';
-
 export const routes: Routes = [
-	{ path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-	// { path: 'dashboard', component: DashboardPageComponent },
-	// { path: 'monthly-planning', component: MonthlyPlanningPageComponent },
-	// { path: 'monthly-plans/:year/:month', component: MonthlyPlanPageComponent },
-	// { path: 'expenses/new', component: AddExpensePageComponent },
-	{ path: '**', redirectTo: 'monthly-planning' }
+  { path: '', pathMatch: 'full', redirectTo: 'monthly-planning' },
+  {
+    path: 'monthly-planning',
+    loadComponent: () => import('./features/monthly-planning/monthly-planning').then(module => module.MonthlyPlanningPage)
+  },
+  {
+    path: 'expenses/new',
+    loadComponent: () => import('./features/expenses/expenses').then(module => module.ExpensesPage)
+  },
+  {
+    path: 'monthly-plans/:year/:month/spending',
+    loadComponent: () => import('./features/spending-by-jar/spending-by-jar').then(module => module.SpendingByJarPage)
+  },
+  {
+    path: 'monthly-plans/:year/:month',
+    loadComponent: () => import('./features/income-allocation/income-allocation').then(module => module.IncomeAllocationPage)
+  },
+  { path: '**', redirectTo: 'monthly-planning' }
 ];

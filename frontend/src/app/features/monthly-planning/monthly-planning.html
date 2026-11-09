@@ -1,0 +1,112 @@
+<section class="page-heading">
+  <p class="eyebrow">A calmer way to manage money</p>
+  <h1>Plan your month</h1>
+  <p class="intro">Give every part of your family income a purpose with seven simple jars.</p>
+</section>
+
+@if (loadError) {
+  <section class="notice error" role="alert">
+    <div>
+      <strong>Could not load your jar plan.</strong>
+      <p>{{ loadError.message }}</p>
+    </div>
+    <button class="button secondary" type="button" (click)="retryDefaults()">Try again</button>
+  </section>
+} @else if (loadingDefaults) {
+  <output class="notice">Loading your seven default jars…</output>
+} @else {
+  <div class="planning-grid">
+    <section class="panel setup-panel" aria-labelledby="plan-heading">
+      <div class="panel-heading">
+        <span class="step-badge">01</span>
+        <div>
+          <p class="eyebrow">Get started</p>
+          <h2 id="plan-heading">Set your monthly income</h2>
+        </div>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <fieldset [disabled]="saving">
+          <legend class="sr-only">Monthly plan details</legend>
+          <div class="period-fields">
+            <label>
+              <span>
+                Year
+                <b aria-hidden="true">*</b>
+              </span>
+              <input type="number" formControlName="year" min="1" max="9999" required />
+              @if (form.controls.year.touched && form.controls.year.invalid) {
+                <small class="field-error">Enter a year from 1 to 9999.</small>
+              }
+            </label>
+            <label>
+              <span>
+                Month
+                <b aria-hidden="true">*</b>
+              </span>
+              <select formControlName="month" required>
+                @for (month of months; track month.value) {
+                  <option [ngValue]="month.value">{{ month.label }}</option>
+                }
+              </select>
+            </label>
+          </div>
+          <label class="income-field">
+            <span>
+              Monthly income
+              <b aria-hidden="true">*</b>
+            </span>
+            <div class="money-input">
+              <input
+                id="monthlyIncome"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                formControlName="monthlyIncomeVnd"
+                (input)="formatIncomeInput($event)"
+                placeholder="e.g. 25,000,000"
+                aria-describedby="income-hint income-error"
+                required />
+              <span>VND</span>
+            </div>
+            <small id="income-hint" class="field-hint">Thousands separators are added automatically.</small>
+            @if (form.controls.monthlyIncomeVnd.touched && form.controls.monthlyIncomeVnd.invalid) {
+              <small id="income-error" class="field-error">Enter a positive whole-VND amount.</small>
+            }
+          </label>
+        </fieldset>
+
+        @if (error) {
+          <div class="notice error" role="alert">
+            <strong>{{ error.message }}</strong>
+            @for (fieldError of error.errors; track fieldError.field + fieldError.code) {
+              <small>{{ fieldError.message }}</small>
+            }
+          </div>
+        }
+
+        <button class="button primary submit-button" type="submit" [disabled]="saving">
+          {{ saving ? 'Creating plan…' : 'Create monthly plan' }}
+          @if (!saving) {
+            <span aria-hidden="true">→</span>
+          }
+        </button>
+        <p class="submit-note">Your jar percentages are fixed. The backend calculates each budget.</p>
+      </form>
+    </section>
+
+    <section class="panel jars-panel" aria-labelledby="jars-heading">
+      <div class="panel-heading">
+        <span class="step-badge light">02</span>
+        <div>
+          <p class="eyebrow">Your money, with purpose</p>
+          <h2 id="jars-heading">Seven family jars</h2>
+        </div>
+      </div>
+      <app-default-jar-list [jars]="jars" />
+      <div class="total-row">
+        <span>Total allocated</span>
+        <strong>100%</strong>
+      </div>
+    </section>
+  </div>
+}

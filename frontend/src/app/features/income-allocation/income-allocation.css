@@ -1,0 +1,18 @@
+.back-link { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 23px; color: #527461; font-size: 13px; font-weight: 700; text-decoration: none; }
+.back-link:hover { color: #244b3a; }
+.page-heading { margin: 0 0 23px; }
+.eyebrow { margin: 0 0 8px; color: #66836d; font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+h1 { margin: 0; color: #233b30; font-size: clamp(30px, 4vw, 42px); letter-spacing: -.05em; }
+.intro { margin: 10px 0 0; color: #6f7d73; }
+.period-selector { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 16px; margin-bottom: 22px; border: 1px solid #e7ebe4; border-radius: 17px; background: #fff; }
+label { display: grid; min-width: 130px; gap: 6px; color: #53665a; font-size: 12px; font-weight: 700; }
+input, select { min-height: 40px; padding: 0 10px; border: 1px solid #dfe5dc; border-radius: 10px; background: #fff; color: #293d32; font: inherit; }
+.button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; padding: 0 15px; border: 0; border-radius: 10px; background: #32734b; color: white; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; text-decoration: none; }
+.button:disabled { cursor: not-allowed; opacity: .55; }
+.button.secondary { border: 1px solid #dce5da; background: white; color: #326444; }
+.notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; border: 1px solid #e2e9df; border-radius: 15px; background: #f8faf6; color: #435b4c; }
+.notice p { margin: 5px 0 0; }
+.notice.error { border-color: #f0d7d1; background: #fff7f5; color: #984838; }
+.spending-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 23px; color: #2f7048; font-size: 14px; font-weight: 800; text-decoration: none; }
+.spending-link:hover { text-decoration: underline; }
+@media (max-width: 520px) { .period-selector { align-items: stretch; flex-direction: column; } label { width: 100%; } .notice { align-items: flex-start; flex-direction: column; } }

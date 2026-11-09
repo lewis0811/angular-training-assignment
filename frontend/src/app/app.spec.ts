@@ -6,12 +6,17 @@ import { describe, expect, it } from 'vitest';
 import { App } from './app';
 
 describe('App', () => {
-  it('creates the root application component', async () => {
+  it('renders the application shell and feature navigation', async () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [provideHttpClient(), provideRouter([])]
     }).compileComponents();
 
-    expect(TestBed.createComponent(App).componentInstance).toBeInstanceOf(App);
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance).toBeInstanceOf(App);
+    const links = fixture.nativeElement.querySelectorAll('nav a') as NodeListOf<HTMLAnchorElement>;
+    expect([...links].map(link => link.textContent?.trim())).toEqual(['Plan', 'Add expense']);
   });
 });
